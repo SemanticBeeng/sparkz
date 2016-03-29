@@ -1,12 +1,13 @@
 package sparkz.evaluation
 
+import org.apache.spark.SparkContext.rddToPairRDDFunctions
 import org.apache.spark.rdd.RDD
 
 import scalaz.Scalaz._
 
 object MAP {
   def apply[T](n: Int = 100, recommendations: RDD[(Long, List[T])], evaluation: RDD[(Long, Set[T])]): Double =
-    recommendations.join(evaluation).values.map {
+    rddToPairRDDFunctions(recommendations).join(evaluation).values.map {
       case (recommendedLikes, trueLikes) => recommendedLikes.take(n).zipWithIndex.foldLeft(0, 0.0) {
         case ((accLikes, accPrecision), (postId, k)) if trueLikes(postId) =>
           (accLikes + 1, accPrecision + ((accLikes + 1).toDouble / (k + 1)))

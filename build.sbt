@@ -10,6 +10,7 @@ libraryDependencies ++= Seq(
   "joda-time" % "joda-time" % "2.6" withSources() withJavadoc(),
   "org.joda" % "joda-convert" % "1.2" withSources() withJavadoc(),
   "org.apache.spark" % "spark-core_2.10" % "1.3.0-cdh5.4.4" withSources() withJavadoc(),
+  "org.apache.spark" % "spark-mllib_2.10" % "1.3.0-cdh5.4.4" withSources() withJavadoc(),
   "com.github.scala-incubator.io" %% "scala-io-file" % "0.4.2" withSources() withJavadoc(),
   "org.scalaz" %% "scalaz-core" % "7.0.6" withSources() withJavadoc(),
   "org.rogach" %% "scallop" % "0.9.5" withSources() withJavadoc(),

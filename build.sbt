@@ -17,10 +17,31 @@ libraryDependencies ++= Seq(
 //  "org.scala-lang" % "scalap" % "2.10.4" withSources() withJavadoc(),
 //  "org.scala-lang" % "scala-compiler" % "2.10.4" withSources() withJavadoc(),
   "org.specs2" %% "specs2-core" % "2.4.9-scalaz-7.0.6" % "test" withSources() withJavadoc(),
-  "org.specs2" %% "specs2-scalacheck" % "2.4.9-scalaz-7.0.6" % "test" 
+  "org.specs2" %% "specs2-scalacheck" % "2.4.9-scalaz-7.0.6" % "test"
 )
 
 resolvers ++= Seq(
-  "mvnrepository" at "https://repository.cloudera.com/artifactory/cloudera-repos/",
   "Maven Central" at "https://repo1.maven.org/maven2/"
 )
+
+mergeStrategy in assembly <<= (mergeStrategy in assembly) ((old) => {
+  case x if Assembly.isConfigFile(x) =>
+    MergeStrategy.concat
+  case PathList(ps @ _*) if Assembly.isReadme(ps.last) || Assembly.isLicenseFile(ps.last) =>
+    MergeStrategy.rename
+  case PathList("META-INF", xs @ _*) =>
+    (xs map {_.toLowerCase}) match {
+      case ("manifest.mf" :: Nil) | ("index.list" :: Nil) | ("dependencies" :: Nil) =>
+        MergeStrategy.discard
+      case ps @ (x :: xs) if ps.last.endsWith(".sf") || ps.last.endsWith(".dsa") =>
+        MergeStrategy.discard
+      case "plexus" :: xs =>
+        MergeStrategy.discard
+      case "services" :: xs =>
+        MergeStrategy.filterDistinctLines
+      case ("spring.schemas" :: Nil) | ("spring.handlers" :: Nil) =>
+        MergeStrategy.filterDistinctLines
+      case _ => MergeStrategy.first // Changed deduplicate to first
+    }
+  case PathList(_*) => MergeStrategy.first // added this line
+})

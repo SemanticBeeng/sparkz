@@ -16,9 +16,10 @@ object BinaryClassifierEvaluation {
    orderingField: Meta => Order,
    singleInference: Boolean = true,
    seed: Long = 12345L): Map[BinaryClassifierTrainer[Features], RDD[(FeaturesWithBooleanLabel[Features] with MetaData[Meta], Double)]] =
+
     (for {
       i <- 0 until k
-      otherFolds = data.filter(_.metaData |> uniqueId |> (_.hashCode() % k == i))
+      otherFolds  = data.filter(_.metaData |> uniqueId |> (_.hashCode() % k == i))
       holdoutFold = data.filter(_.metaData |> uniqueId |> (_.hashCode() % k != i))
 
       splitMax = holdoutFold

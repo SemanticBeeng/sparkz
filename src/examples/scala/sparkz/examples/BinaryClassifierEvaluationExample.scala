@@ -21,7 +21,7 @@ object BinaryClassifierEvaluationExample {
 
     val eventsSubTransformer = TermFrequencyTransformer[String, UserFeatures](_.events)
     val categoriesSubTransformer = MultiOneHotTransformer[String, UserFeatures](_.attributes)
-    val numericalsSubTransformer = OriginalNumericalsTransformer[String, UserFeatures](_.numericals)
+    val numericalSubTransformer = OriginalNumericalsTransformer[String, UserFeatures](_.numericals)
 
     val classifiers: List[BinaryClassifierTrainer[UserFeatures]] = List(
       RandomBinaryClassifierTrainer(),
@@ -35,11 +35,11 @@ object BinaryClassifierEvaluationExample {
       ),
       BinaryClassifierTrainerWithTransformer(
         vec2classifier = vecDecisionTreeClassifier,
-        transformer = numericalsSubTransformer
+        transformer = numericalSubTransformer
       ),
       BinaryClassifierTrainerWithTransformer(
         vec2classifier = vecDecisionTreeClassifier,
-        transformer = EnsembleTransformer(eventsSubTransformer, categoriesSubTransformer, numericalsSubTransformer)
+        transformer = EnsembleTransformer(eventsSubTransformer, categoriesSubTransformer, numericalSubTransformer)
       )
     )
 

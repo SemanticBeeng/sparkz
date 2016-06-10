@@ -39,6 +39,10 @@ resources/templates.list
 build/
 build.properties
 junit*.properties
-project/*
 target/*
+project/.boot/
+project/.ivy/
+project/project/
+project/target/
+
 
